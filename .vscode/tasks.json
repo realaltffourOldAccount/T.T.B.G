@@ -1,0 +1,35 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [{
+            "label": "C/C++ Build",
+            "type": "shell",
+            "command": "clear && make",
+            "problemMatcher": []
+        },
+        {
+            "label": "C/C++ Configure",
+            "type": "shell",
+            "command": "clear && cmake .",
+            "problemMatcher": []
+        },
+        {
+            "label": "C/C++ Rebuild",
+            "type": "shell",
+            "command": "clear && make clean && cmake . && make",
+            "problemMatcher": []
+        },
+        {
+            "label": "C/C++ Build One Time",
+            "type": "shell",
+            "command": "clear && cmake . && make",
+        },
+        {
+            "label": "Clean for GitHub Push",
+            "type": "shell",
+            "command": "clear && make clean && rm -r CMakeFiles && rmdir CMakeFiles && rm -r build && rm cmake_install.cmake && rm CMakeCache.txt && rm MakeFile",
+            "problemMatcher": []
+        }
+    ]
+}

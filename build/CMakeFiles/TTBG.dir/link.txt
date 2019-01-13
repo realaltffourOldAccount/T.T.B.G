@@ -1,0 +1,1 @@
+/usr/bin/x86_64-linux-gnu-g++-7   -std=c++14 -fpermissive -g -pthread -g   CMakeFiles/TTBG.dir/T.T.B.G/app_entry.cpp.o  -o bin/TTBG -L/usr/lib/x86_64-linux-gnu -pthread -lwx_gtk2u_aui-3.0 -lwx_baseu-3.0 -lwx_gtk2u_core-3.0 -lwx_gtk2u_gl-3.0 bin/libTTBG-API.a -L/usr/lib/x86_64-linux-gnu -pthread -lwx_gtk2u_aui-3.0 -lwx_baseu-3.0 -lwx_gtk2u_core-3.0 -lwx_gtk2u_gl-3.0 

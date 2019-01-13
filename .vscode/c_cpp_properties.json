@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/T.T.B.G-GUI/",
+                "${workspaceFolder}/T.T.B.G-api/",
+                "/usr/lib/x86_64-linux-gnu/wx/include/gtk2-unicode-3.0",
+                "/usr/include/wx-3.0/",
+                "${workspaceFolder}/*"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "configurationProvider": "vector-of-bool.cmake-tools",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+        }
+    ],
+    "version": 4
+}
