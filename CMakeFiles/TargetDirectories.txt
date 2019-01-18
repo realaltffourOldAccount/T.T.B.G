@@ -1,4 +1,0 @@
-/home/ayham-mamoun/Desktop/git repos/T.T.B.G/CMakeFiles/rebuild_cache.dir
-/home/ayham-mamoun/Desktop/git repos/T.T.B.G/CMakeFiles/edit_cache.dir
-/home/ayham-mamoun/Desktop/git repos/T.T.B.G/CMakeFiles/TTBG-API.dir
-/home/ayham-mamoun/Desktop/git repos/T.T.B.G/CMakeFiles/TTBG.dir

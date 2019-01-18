@@ -1,11 +1,12 @@
 #include "Individual.h"
 
 void Individual::Init(vector<Teacher> *teachers, vector<Subject> *subject,
-                      int n) {
+                      vector<Level> *level, int n) {
     assert(teachers);
 
     mTeachers = teachers;
     mSubjects = subject;
+    mLevels = level;
     mTables = new vector<Table>(n);
 
     *mTables;
@@ -46,15 +47,16 @@ void Individual::CalcFitness() {
 
 Individual Individual::mate(const Individual &indiv) {
     Individual offspring;  // the child
-    offspring.Init(mTeachers, mSubjects, mTables->size());
+    offspring.Init(mTeachers, mSubjects, mLevels, mTables->size());
 
     vector<Table> *chromosome_p2 = indiv.GetChromosome();
     vector<Table> child_chromosome;
 
-    int ta_counter = 0;                   // counter for the p2 table
-    for (auto p1_crnt_ta : (*mTables)) {  // iterate over all tables
-        Table p2_crnt_ta = (*chromosome_p2)[ta_counter];
-        ta_counter++;
+    int ta2_counter = 0;  // counter for the p2 table
+    for (auto p1_crnt_ta :
+         (*mTables)) {  // iterate over all tables of the parents
+        Table p2_crnt_ta = (*chromosome_p2)[ta2_counter];
+        ta2_counter++;
         float chance = (float)random(0, 100) / 100;
         if (chance < 0.30)  // gene from first parent
             child_chromosome.push_back(p1_crnt_ta);
@@ -62,7 +64,8 @@ Individual Individual::mate(const Individual &indiv) {
             child_chromosome.push_back(p2_crnt_ta);
         else {  // mutated gene
             Table mutated_ta;
-            mutated_ta.GenerateRandTable(mTeachers, mSubjects);
+            mutated_ta.GenerateRandTable(mTeachers, mSubjects,
+                                         (*mLevels)[ta2_counter]);
             child_chromosome.push_back(mutated_ta);
         }
     }
@@ -70,6 +73,6 @@ Individual Individual::mate(const Individual &indiv) {
 
 void Individual::GenerateTables() {
     for (int i = 0; i < mTables->size(); i++)
-        (*mTables)[i].GenerateRandTable(mTeachers,
-                                        mSubjects);  // make more faster
+        (*mTables)[i].GenerateRandTable(mTeachers, mSubjects,
+                                        (*mLevels)[i]);  // make more faster
 }

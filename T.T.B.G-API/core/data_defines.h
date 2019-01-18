@@ -6,20 +6,6 @@
 #include <string>
 #include <vector>
 
-// Subject Type
-struct Subject {
-    int _ID;
-    string _name;
-    // Clears the subject var
-    void clear() {
-        _ID = 0;
-        _name = "";
-    }
-    bool operator==(const Subject &subj) const {
-        if (subj._ID == _ID && subj._name == _name) return true;
-        return false;
-    }
-};
 // Level Type
 struct Level {
     int _ID;
@@ -33,19 +19,42 @@ struct Level {
         if (_ID == level._ID && _value == level._value) return true;
         return false;
     }
+    bool operator<=(const Level &level) const {
+        return LevelNumber() <= level.LevelNumber();
+    }
+    bool operator>=(const Level &level) const {
+        return LevelNumber() >= level.LevelNumber();
+    }
     // Returns the level number
-    int LevelNumber() { return atoi(_value.c_str()); }
+    int LevelNumber() const { return atoi(_value.c_str()); }
     // Returns the level string, or letter in other words.
-    string LevelStr() {
+    string LevelStr() const {
         int num = this->LevelNumber();
         string numstr = to_string(num);
         return ExtractFromStr(numstr, this->_value);
     }
 };
-// Teacher Type
-struct Teacher {
+// Subject Type
+struct Subject {
     int _ID;
     string _name;
+    Level _min_level;
+    Level _max_level;
+    bool _teacher_req = true;
+    // Clears the subject var
+    void clear() {
+        _ID = 0;
+        _name = "";
+    }
+    bool operator==(const Subject &subj) const {
+        if (subj._ID == _ID && subj._name == _name) return true;
+        return false;
+    }
+};
+// Teacher Type, without altering it is default.
+struct Teacher {
+    int _ID = -1;
+    string _name = "<DEFAULT>";
     vector<Subject> _subjects;
     vector<Level> _levels;
 
@@ -59,33 +68,31 @@ struct Teacher {
     // for stl map container, may be used in future teacher prioritization
     bool operator<(const Teacher &tchr) const { return _ID < tchr._ID; }
 };
+// Default teacher:
+static Teacher DEFAULT_TCHR;
+
 // TableInfo Type
 struct TableInfo {
     int _ID;
     string _name;
-    Level _level;
 };
-// Gets the subjects list from teachers, not used.
-// TODO: CHECK CORRECTNESS
-static vector<Subject> GetSubjectsFromVecTeachers(vector<Teacher> *tchrs) {
-    vector<Subject> *result = new vector<Subject>;
-    for (auto teacher : *tchrs)
-        for (auto subj : teacher._subjects)
-            if (isNotInVec(*result, subj)) result->push_back(subj);
-    return *result;
-}
 // Returns a random teacher of the subject
 // TODO: MORE OPTIMIZATION
 static Teacher GetTeacherOfSubject(vector<Teacher> *mTeachers,
-                                   vector<Subject> *mSubjects, Subject subj) {
+                                   vector<Subject> *mSubjects, Subject subj,
+                                   Level lvl) {
     Teacher tchr;
+    vector<Teacher> _checked_teachers;
     while (true) {
         auto teacher = (*mTeachers)[random(0, mTeachers->size() - 1)];
-        for (auto subject : (*mSubjects))
-            if (findInVec(teacher._subjects, subject) != -1) {
+        if (findInVec(teacher._subjects, subj) != -1)
+            if (findInVec(teacher._levels, lvl) != -1) {
                 tchr = teacher;
                 return tchr;
             }
+        _checked_teachers.push_back(teacher);
+        if (make_vec_unique(_checked_teachers).size() >= mTeachers->size())
+            break;
     }
     return tchr;
 }
@@ -93,6 +100,7 @@ static Teacher GetTeacherOfSubject(vector<Teacher> *mTeachers,
 struct Slot {
     Teacher _tchr;
     Subject _subj;
+    bool _teacher_req = true;
 
     Slot() {}
 
@@ -117,16 +125,26 @@ struct Slot {
 };
 // Table Typedef
 struct Table {
+    Level _level;
     TableInfo _info;
     vector<Slot> _slots;
     // Generates random table with teacher and subject array.
-    void GenerateRandTable(vector<Teacher> *tchr, vector<Subject> *subj) {
+    void GenerateRandTable(vector<Teacher> *tchr, vector<Subject> *subj,
+                           Level lvl) {
         vector<Subject> subjects = *subj;
         while (!subjects.empty()) {
+            Slot slot;
             int rand = random(0, subjects.size() - 1);
             auto subject = subjects[rand];
-            auto teacher = GetTeacherOfSubject(tchr, &subjects, subject);
-            Slot slot(teacher, subject);
+            slot._subj = subject;
+            if (!(subject._min_level <= lvl)) continue;
+            if (!(subject._max_level >= lvl)) continue;
+            if (subject._teacher_req != false) {
+                auto teacher =
+                    GetTeacherOfSubject(tchr, &subjects, subject, lvl);
+                if (teacher == DEFAULT_TCHR) continue;
+                slot._tchr = teacher;
+            }
             _slots.push_back(slot);
             subjects.erase(subjects.begin() + rand);
         }
@@ -138,7 +156,9 @@ struct Report {
     string _name;
     bool _isGenerated = false;
     vector<Teacher> _teachers;
+    vector<Subject> _subjects;
     vector<Level> _levels;
     vector<Table> _tables;
+    vector<vector<string> > _raw_data;
 };
 #endif

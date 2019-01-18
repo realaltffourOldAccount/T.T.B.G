@@ -1,13 +1,15 @@
 #include "Population.h"
-#include <thread>
 
 void Population::Init(vector<Teacher> teachers, vector<Subject> subjects,
-                      size_t pop_size, size_t table_count) {
+                      vector<Level> levels, size_t pop_size,
+                      size_t table_count) {
     assert(teachers.size());
     assert(subjects.size());
+    assert(levels.size());
 
     mTeachers = teachers;
     mSubjects = subjects;
+    mLevels = levels;
     mIndividuals = new vector<Individual>(pop_size);
     mPopulationSize = pop_size;
     mTablesCount = table_count;
@@ -16,7 +18,13 @@ void Population::Init(vector<Teacher> teachers, vector<Subject> subjects,
 void Population::Start(float min) { __start(min); }
 
 void Population::StartThreaded(float min_correctness) {
-    new thread(&Population::__start, this, min_correctness);
+    __ga_thread = new thread(&Population::__start, this, min_correctness);
+}
+
+void Population::Stop() {
+    if (mThreadStopped) return;  // Thread already stopped.
+    __ga_thread->~thread();
+    delete __ga_thread;
 }
 
 void Population::__start(float min_correctness) {
@@ -26,7 +34,7 @@ void Population::__start(float min_correctness) {
     //  initialize the indivs
     mCrntGenMadeCnt = 0;
     for (int i = 0; i < mIndividuals->size(); i++) {
-        (*mIndividuals)[i].Init(&mTeachers, &mSubjects, mTablesCount);
+        (*mIndividuals)[i].Init(&mTeachers, &mSubjects, &mLevels, mTablesCount);
         (*mIndividuals)[i].CalcFitness();
         mCrntGenMadeCnt++;
     }
@@ -55,7 +63,7 @@ void Population::__start(float min_correctness) {
         r = (20 * mPopulationSize) / 100;
         for (int i = 0; i < r; i++) {
             Individual indiv;
-            indiv.Init(&mTeachers, &mSubjects, mTablesCount);
+            indiv.Init(&mTeachers, &mSubjects, &mLevels, mTablesCount);
             indiv.CalcFitness();
             new_generation.push_back(indiv);
         }

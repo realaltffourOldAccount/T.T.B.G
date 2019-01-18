@@ -16,6 +16,16 @@ bool is_all_unique(vector<Fwd> vec) {
     return std::adjacent_find(vec.begin(), vec.end()) == vec.end();
 }
 
+// Make an array unique, and returns sorted
+template <class Fwd>
+vector<Fwd> make_vec_unique(vector<Fwd> vec) {
+    vector<Fwd> sorted_vec = vec;
+    stable_sort(sorted_vec.begin(), sorted_vec.end());
+    sorted_vec.erase(unique(sorted_vec.begin(), sorted_vec.end()),
+                     sorted_vec.end());
+    return sorted_vec;
+}
+
 // determine if a value of Type T is not in the vector vec
 template <class T>
 static bool isNotInVec(vector<T> vec, T item) {

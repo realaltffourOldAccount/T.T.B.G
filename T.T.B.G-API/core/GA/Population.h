@@ -15,6 +15,7 @@
 #include "Individual.h"
 
 #include <algorithm>
+#include <thread>
 
 class Population {
    public:
@@ -22,10 +23,13 @@ class Population {
     // Teacher array,
     // Subject array,
     // Population size, and table count.
-    void Init(vector<Teacher>, vector<Subject>, size_t pop_size,
+    void Init(vector<Teacher>, vector<Subject>, vector<Level>, size_t pop_size,
               size_t table_count);
     // Starts the genetic algorithm on the calling thread.
     void Start(float min_correctness);
+    // Force stops the genetic algorithm,
+    // the generation will remain as its finaly stage done by the algo.
+    void Stop();
     // Starts the genetic algorithm on a seperate thread from the main.
     void StartThreaded(float min_correctness);
 
@@ -43,9 +47,10 @@ class Population {
    private:
     // Genetic Algorithm
     void __start(float min_correctness);
-
+    thread* __ga_thread = nullptr;
     vector<Teacher> mTeachers;
     vector<Subject> mSubjects;
+    vector<Level> mLevels;
     vector<Individual>* mIndividuals = nullptr;
     size_t mPopulationSize = 0;
     size_t mTablesCount = 0;

@@ -12,11 +12,14 @@ class _GA {
     // Initializes the class, and the Population class.
     // The teachers and subjects are directly passed to the Population
     // class.
-    void Init(vector<Teacher>, vector<Subject>, size_t pop_size,
+    void Init(vector<Teacher>, vector<Subject>, vector<Level>, size_t pop_size,
               size_t table_count);
     // Min is the minimum correctness of the result. (ranges: 0.0-1.0)
     // threaded, if true start threaded else normal start.
     void Start(float min, bool threaded = true);
+
+    // Stops the thead
+    void Stop() { mPopulation->Stop(); }
 
     // Returns the whole population.
     vector<Individual>* GetPopulation() const {

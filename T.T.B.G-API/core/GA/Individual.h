@@ -24,8 +24,11 @@ class Individual {
     // Initializes the class, pass by pointer the teacher vec,
     // No need for the table info(long term optimization),
     // so number of tables are enough.
+    // The level must be passed to prevent teacher
+    // teaching wrong levels.
     // (Look at Table definition)
-    void Init(vector<Teacher> *, vector<Subject> *, int numOfTables);
+    void Init(vector<Teacher> *, vector<Subject> *, vector<Level> *,
+              int numOfTables);
     // Calculates fitness and sits it to mFitness var.
     void CalcFitness();
     // Straightforward
@@ -47,6 +50,7 @@ class Individual {
 
     vector<Teacher> *mTeachers;
     vector<Subject> *mSubjects;
+    vector<Level> *mLevels;
     vector<Table> *mTables;  // also, in ga, Chromosome
     float mFitness = 0;
 };

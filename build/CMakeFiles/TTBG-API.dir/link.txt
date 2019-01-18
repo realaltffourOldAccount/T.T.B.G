@@ -1,2 +1,0 @@
-/usr/bin/ar qc bin/libTTBG-API.a  CMakeFiles/TTBG-API.dir/T.T.B.G-API/core/GA/Individual.cpp.o CMakeFiles/TTBG-API.dir/T.T.B.G-API/core/GA/Population.cpp.o CMakeFiles/TTBG-API.dir/T.T.B.G-API/core/GA/_GA.cpp.o CMakeFiles/TTBG-API.dir/T.T.B.G-API/core/utils/files/File_Manager.cpp.o CMakeFiles/TTBG-API.dir/T.T.B.G-API/core/utils/files/csv/csv_loader.cpp.o CMakeFiles/TTBG-API.dir/T.T.B.G-API/core/utils/files/csv/csv_saver.cpp.o CMakeFiles/TTBG-API.dir/T.T.B.G-API/driver/API_driver.cpp.o
-/usr/bin/ranlib bin/libTTBG-API.a
