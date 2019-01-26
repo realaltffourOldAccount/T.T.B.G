@@ -1,0 +1,4 @@
+
+Rules for the algorithm:
+    - No conflict of teachers in a period
+    - No multiple classes in a room
